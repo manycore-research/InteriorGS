@@ -22,7 +22,8 @@ A comprehensive indoor scene dataset featuring 3D Gaussian representations with 
 
 ## 🔄 News
 
-- 2025-07-24: Initial release InteriorGS (v1.0) with 500 scenes on [🤗 Huggingface](https://huggingface.co/datasets/spatialverse/InteriorGS).
+- 2025-08-01: Released InteriorGS v2.0, featuring 1,000 indoor scenes along with their corresponding floorplans.
+- 2025-07-24: Initial release InteriorGS (v1.0) with 500 scenes.
 
 ## 📋 Overview
 
@@ -47,11 +48,13 @@ InteriorGS
 │   ├── labels.json         # Semantic annotations and bounding boxes
 │   ├── occupancy.png       # Grayscale occupancy map
 │   └── occupancy.json      # Occupancy metadata
+|   └── structure.json      # Floorplan data
 ├── 0002_839955
 │   ├── 3dgs_compressed.ply
 │   ├── labels.json
 │   ├── occupancy.png
 │   └── occupancy.json
+|   └── structure.json 
 └── ...
 ```
 
@@ -78,8 +81,31 @@ InteriorGS
 - **Values**: 
   - `255` (white): Free space
   - `0` (black): Occupied space
-  - `127` (gray): Unknown space 
+  - `127` (gray): Unknown space
 
+### Floorplan data (structure.json)
+
+This document provides an explanation of the keys used in the scene layout data. Coordinate system is right-handed, z
+up, and unit in meter.
+
+- **rooms**: array of rooms within the scene layout. Virtual partition of the scene that does not refer to actual geometry.
+    - **profile**: 2D polygon in xy plane that defines room outline or contour.
+    - **room_type**: functional type, such as "Living and Dining Room", "Master Bedroom", etc.
+
+- **walls**: array of wall meshes.
+    - **location**: line segment in xy plane.
+    - **thickness**: total distance extended from line segment in direction in xy plane and orthogonal to line segment .
+    - **height**: height in z axis from ground(z=0).
+
+- **holes**: openings on the walls, for placing other objects such as window and door.
+    - **profile**: 3D polygon that defines the hole shape on the wall.
+    - **thickness**: total distance extended from profile in direction of profile plane normal.
+    - **type**: WINDOW or DOOR.
+
+- **ins**: instances within scene.
+    - **label**: semantic label, such as "Window", "Curtain", "Chair", etc.
+    - **position**: instance bounding box center in world frame.
+    - **size**: instance bounding box size in world frame.
 
 ## 🏠 Citation
 
